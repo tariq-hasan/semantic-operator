@@ -15,7 +15,6 @@ name: ci
 
 on:
   push:
-    branches: [main]
   pull_request:
 
 permissions:
@@ -27,10 +26,12 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 #v7.0.1
         with:
-          fetch-depth: '2'
-      - uses: kubeflow/testing/.github/actions/verify-boilerplate@50eacdea9a3ed831bc5915da43634ec07c02898d
+          fetch-depth: 0
+      - uses: kubeflow/testing/.github/actions/verify-boilerplate@5b61e886e760c60bfc1b6f1d1eaa3d79fb18b03b
         with:
-          base-reference: ${{ github.event.pull_request.base.sha }}
+          exclude: |
+            ^api/v1alpha1/zz_generated.deepcopy.go$
+            ^internal/starrocks/mysqldriver/
       - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e #v7.0.0
         with:
           go-version-file: go.mod
